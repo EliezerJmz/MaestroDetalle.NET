@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MaestroDetalleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Concepto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdVenta" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="Cliente" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Concepto_Venta">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+          <End Role="Concepto" Type="Self.Concepto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Concepto">
+              <PropertyRef Name="IdVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MaestroDetalleModelStoreContainer">
+          <EntitySet Name="Concepto" EntityType="Self.Concepto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Concepto_Venta" Association="Self.FK_Concepto_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="Concepto" EntitySet="Concepto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MaestroDetalleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Concepto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdVenta" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Venta" Relationship="Self.FK_Concepto_Venta" FromRole="Concepto" ToRole="Venta" />
+        </EntityType>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Cliente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Concepto" Relationship="Self.FK_Concepto_Venta" FromRole="Venta" ToRole="Concepto" />
+        </EntityType>
+        <Association Name="FK_Concepto_Venta">
+          <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+          <End Role="Concepto" Type="Self.Concepto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Concepto">
+              <PropertyRef Name="IdVenta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MaestroDetalleEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Concepto" EntityType="Self.Concepto" />
+          <EntitySet Name="Venta" EntityType="Self.Venta" />
+          <AssociationSet Name="FK_Concepto_Venta" Association="Self.FK_Concepto_Venta">
+            <End Role="Venta" EntitySet="Venta" />
+            <End Role="Concepto" EntitySet="Concepto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MaestroDetalleModelStoreContainer" CdmEntityContainer="MaestroDetalleEntities">
+          <EntitySetMapping Name="Concepto">
+            <EntityTypeMapping TypeName="MaestroDetalleModel.Concepto">
+              <MappingFragment StoreEntitySet="Concepto">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdVenta" ColumnName="IdVenta" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Venta">
+            <EntityTypeMapping TypeName="MaestroDetalleModel.Venta">
+              <MappingFragment StoreEntitySet="Venta">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Cliente" ColumnName="Cliente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
