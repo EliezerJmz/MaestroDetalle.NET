@@ -44,13 +44,14 @@ namespace MaestroDetalle.Controllers
                     //debemos reccorrer model.Conceptos que es de tipo VentaViewModel 
                     foreach (var ConceptoModel in model.Conceptos)
                     {
-                        //creamos un objeto para llenar los campos que vienen en el model y los campos que se calcular automaticamente
+                        //creamos un objeto para llenar los campos que vienen en el model.Conceptos y los campos que se calcular automaticamente
                         Concepto concepto = new Concepto();
                         concepto.Cantidad = ConceptoModel.Cantidad;
                         concepto.Nombre = ConceptoModel.Nombre;
                         concepto.PrecioUnitario = ConceptoModel.PrecioUnitario;
                         concepto.Total = ConceptoModel.Cantidad * ConceptoModel.PrecioUnitario;
                         //son los id que estan relacionados
+                        //se le asigna el mismo venta.Id al listado de conceptos
                         concepto.IdVenta = venta.Id;
 
                         //agregamos el prinmer objeto a la tabla Concepto de la db
