@@ -39,73 +39,51 @@
             <input type="number" class="form-control" id="Precio" placeholder="Ingres un Precio">
         </div>
         <!--return false, para que no realice el submit-->
+        <!--solo inicia el llenado de la lista Conceptos-->
         <input type="button" value="Agregar" class="btn btn-success" onclick="AgregaConcepto(); return false" />
 
         <h3>Detalle:</h3>
     <!--el datalle va a llenar una tabla de forma automatica,
-    agregamos un registro quemado solo para que se vea un registro
     usaremos javaScript para que se llene automaticamente.
     -->
         <div id="divConceptos">
-            <table id="tablaConceptos">
+            <table class="table" id="tablaConceptos" style="width:75%">
                 <tr>
                     <th>Cantidad</th>
                     <th>Nombre</th>
                     <th>Precio Unitario</th>
                     <th>Total</th>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Papa Fritas</td>
-                    <td>10</td>
-                    <td>20</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Hamburguesa</td>
-                    <td>10</td>
-                    <td>10</td>
-                </tr>
+                </tr> 
             </table>
-            <!--Usamos un input type = hidden para que no se muestren los valores
-                y name = Concpetos.Index, name debe tener el mismo nombre que el campo Conceptos de tipo lista del modelo VentasViewModel
-                para que MVC lo reconozca y pueda haer el mach.
-                el primer input tiene un name=Conceptos.Index y value = "0"
-                es el input que le indica el indice a la lista Conceptos en el controller.-->
-            <input type="hidden" name="Conceptos.Index" id="Conceptos.Index" value="0" />
-            <!--envia los valores que tendra la lista Conceptos en el indice 0
-                el controller obtiene los valores por medio de [HttpPost]-->
-            <input type="hidden" name="Conceptos[0].Cantidad" id="Conceptos[0].Cantidad" value="2" />
-            <input type="hidden" name="Conceptos[0].Nombre" id="Conceptos[0].Nombre" value="Papas Fritas" />
-            <input type="hidden" name="Conceptos[0].PrecioUnitario" id="Conceptos[0].PrecioUnitario" value="10" />
-
-            <!--index el indice de la lista continua en 1, value = 1, es el valor que continua del indice de la lista de conceptos-->
-            <input type="hidden" name="Conceptos.Index" id="Conceptos.Index" value="1" />
-            <!--insertar los valores en la lista Conceptos en el indice 1-->
-            <input type="hidden" name="Conceptos[1].Cantidad" id="Conceptos[1].Cantidad" value="1" />
-            <input type="hidden" name="Conceptos[1].Nombre" id="Conceptos[1].Nombre" value="Hanburguesa" />
-            <input type="hidden" name="Conceptos[1].PrecioUnitario" id="Conceptos[1].PrecioUnitario" value="10" />
+          <!--los tr y td con los datos los insertamos con el script de js-->
 
         </div>
 
+        <!--en via los datos del formulario al controlador-->
         <div class="form-group">
-            <input type="submit" />
+            <input type="submit" value="Gurdar Registros" class="btn btn-primary" />
         </div>
     </div>
 
 
     <!--Funcion JS que agrega conceptos a la tabla cuando se haga clic en el boton Agregar-->
     <script>
+        //variable globla para indicar el indiece los input hidden
+        var num = 0;
         function AgregaConcepto() {
+            //**************************** LLENAR LA TABLA ***************************
+            //input principales:
             //obtener los valores de los input:
             let Cantidad = document.getElementById("Cantidad").value;
             let Nombre = document.getElementById("Nombre").value;
             let Precio = document.getElementById("Precio").value;
 
             //Obtener la tabla tablaConceptos
-            let Tabla = document.getElementById("tablaConceptos");
+            //let Tabla = document.getElementById("tablaConceptos");
+            //[0] obtenemos el primer tbody
+            let Tbody = document.getElementsByTagName("tbody")[0];
 
-            //Crear en memotia los tr de la tabla
+            //Crear en memoria los tr de la tabla
             let TR = document.createElement("tr");
 
             //Crear en memoria los td de la tabla
@@ -114,29 +92,83 @@
             let TDPrecio = document.createElement("td");
             let TDTotal = document.createElement("td");
 
-            //Agregar nombres a los td, usamos las let de los valores de los input
+            //Agregar los valores a los td, usamos las let de los valores de los input
             TDCantidad.innerHTML = Cantidad;
             TDNombre.innerHTML = Nombre;
             TDPrecio.innerHTML = Precio;
             //Total lo vamos a calcular en el back end para evitar errores, lo usaremos aqui de forma ilustrativa
             TDTotal.innerHTML = parseFloat(Cantidad) * parseFloat(Precio);
 
-            //Agregar al TR los td 
+            //Agregar al tr los td 
             TR.appendChild(TDCantidad);
             TR.appendChild(TDNombre);
             TR.appendChild(TDPrecio);
             TR.appendChild(TDTotal);
 
-            //Agregar a la Tabla los TR
-            Tabla.appendChild(TR);
+            //Agregar al tbody de la tabla los TR ya contiene a los td
+            Tbody.appendChild(TR);
 
-            //Agregamos los hiddems para que se haga mach con el modelo
+            //Agregar a la Tabla los TR ya contiene a los td
+           // Tabla.appendChild(Tbody);
+
+
+
+           //*************************** ENVIAR LOS DATOS AL CONTROLADOR  **************************
+           //el div que contiene a la tabla
+            let DivConceptos = document.getElementById("divConceptos");
+
+            //Creamos los inputs y los cargamos en una varible, estos input son para que se haga mach con el modelo
+            //para enviaran los datos al controlador que de momento solo estan cargados en la tabla
+            //los ocultamos hidden para que nos e vean en la vista 
+            let HiddenIndex = document.createElement("input"); // HiddenIndex sirve para que MVC sepa que numero de indice se esta utilizado
+            let HiddenCantidad = document.createElement("input");
+            let HiddenNombre = document.createElement("input");
+            let HiddenPrecio = document.createElement("input");
+
+            //Agregamos las propiedades al input  HiddenIndex:
+            //Conceptos debe ser exactemente el nombre que tiene el campo en el modelo:  VentaViewModel Conceptos { get; set; }
+            //HiddenIndex sirve para que el controlador sepa que numero de indice se esta utilizado
+            //ya que Conceptos es una lista que se va a ir llenando
+            //INICIA A LLENAR LA LISTA EN LA POSICION 0:
+            HiddenIndex.name = "Conceptos.Index"
+            HiddenIndex.value = num; //num inicia en 0 es la varaible global
+            HiddenIndex.type = "hidden";
+
+            //Agregamos las propiedades del input principal Cantidad al input HiddenCantidad:
+            //Inicia En la posicion Conceptos[0].Cantidad
+            HiddenCantidad.name = "Conceptos[" + num + "].Cantidad";
+            HiddenCantidad.value = Cantidad; //son los valores de los input que estamos obteniendo en las variables del principio 
+            HiddenCantidad.type = "hidden";
+
+            //agregamos las propiedades del input principal Nombre al input HiddenNombre
+            HiddenNombre.name = "Conceptos[" + num + "].Nombre";
+            HiddenNombre.value = Nombre;  
+            HiddenNombre.type = "hidden";
+
+            //agregamos las propiedades de input principal Precio al input HiddenPrecio 
+            HiddenPrecio.name = "Conceptos[" + num + "].PrecioUnitario";  //los nombres deben ser como estan en el modelo:  VentaViewModel
+            HiddenPrecio.value = Precio;
+            HiddenPrecio.type = "hidden";
+
+
+            //agregamos al DivConceptos los input Hidden
+            //aunque no se mostraran ya que la tabla los estara mostrando, si no se verian dos veces
+            //los input Hidden nos sirven unicamente para enviar los datos al controlador y llenar la lista Conceptos
+            DivConceptos.appendChild(HiddenIndex);
+            DivConceptos.appendChild(HiddenCantidad);
+            DivConceptos.appendChild(HiddenNombre);
+            DivConceptos.appendChild(HiddenPrecio);
+
 
 
             //Borrar los valores de los input
             document.getElementById("Cantidad").value = "";
             document.getElementById("Nombre").value = "";
             document.getElementById("Precio").value = "";
+
+
+            //aumentar la variable global, usada comno indice para llenar la lista
+            num++;
         }
     </script>
 }
