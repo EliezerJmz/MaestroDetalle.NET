@@ -4,67 +4,84 @@
     ViewBag.Title = "Maestro Detalle";
 }
 
-<h2>@ViewBag.Title</h2>
+<h2 class="text-center pt-5">@ViewBag.Title</h2>
 
 <div style="color: forestgreen">
     @ViewBag.Mensaje
 </div>
+<hr />
 
 <!--usamos el helper para el formulario-->
 <!--le indicamos 3 parametris: "Metodo", "Controlador", FormMethod.Post-->
 @using (Html.BeginForm("Add", "MaestroDetalle", FormMethod.Post))
 {
-    <div class="row">
-        <h3>Maestro:</h3>
-        <div class="form-group">
-            @Html.LabelFor(v => v.Cliente)
-            @Html.TextBoxFor(v => v.Cliente, new { @class = "form-control" })
-        </div>
-        <hr />
-     </div>
+   <div class="container">
 
-    <div class="row">
+       <div class="row">
+           <div class="col">
+               <h3>Maestro:</h3>
+               <div class="form-group">
+                   @Html.LabelFor(v => v.Cliente)
+                   @Html.TextBoxFor(v => v.Cliente, new { @class = "form-control" })
+               </div>
+           </div>
+       </div>
+       <hr />
 
-        <!--input que agregan los valores a los campos-->
-        <div class="form-group">
-            <label for="Cantidad">Cantidad</label>
-            <input type="number" class="form-control" id="Cantidad" placeholder="Ingres una Cantidad">
-        </div>
-        <div class="form-group">
-            <label for="Nombre">Nombre</label>
-            <input type="text" class="form-control" id="Nombre" placeholder="Ingres un Nombre">
-        </div>
-        <div class="form-group">
-            <label for="Precio">Precio</label>
-            <input type="number" class="form-control" id="Precio" placeholder="Ingres un Precio">
-        </div>
-        <!--return false, para que no realice el submit-->
-        <!--solo inicia el llenado de la lista Conceptos-->
-        <input type="button" value="Agregar" class="btn btn-success" onclick="AgregaConcepto(); return false" />
+       <div class="row">
+           <div class="col">
+               <!--input que agregan los valores a los campos-->
+               <div class="form-group">
+                   <label for="Cantidad">Cantidad</label>
+                   <input type="number" class="form-control" id="Cantidad" placeholder="Ingres una Cantidad">
+               </div>
+           </div>
+           <div class="col">
+               <div class="form-group">
+                   <label for="Nombre">Nombre</label>
+                   <input type="text" class="form-control" id="Nombre" placeholder="Ingres un Nombre">
+               </div>
+           </div>
+           <div class="col">
+               <div class="form-group">
+                   <label for="Precio">Precio</label>
+                   <input type="number" class="form-control" id="Precio" placeholder="Ingres un Precio">
+               </div>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col">
+               <!--return false, para que no realice el submit-->
+               <!--solo inicia el llenado de la lista Conceptos-->
+               <input type="button" value="Agregar" class="btn btn-success" onclick="AgregaConcepto(); return false" />
+           </div>
+       </div>
+       <hr />
+     
 
-        <h3>Detalle:</h3>
-    <!--el datalle va a llenar una tabla de forma automatica,
-    usaremos javaScript para que se llene automaticamente.
-    -->
-        <div id="divConceptos">
-            <table class="table" id="tablaConceptos" style="width:75%">
-                <tr>
-                    <th>Cantidad</th>
-                    <th>Nombre</th>
-                    <th>Precio Unitario</th>
-                    <th>Total</th>
-                </tr> 
-            </table>
-          <!--los tr y td con los datos los insertamos con el script de js-->
+       <h3 class="pt-5">Detalle:</h3>
+       <!--el datalle va a llenar una tabla de forma automatica,
+            usaremos javaScript para que se llene automaticamente.
+        -->
+       <div id="divConceptos">
+           <table class="table" id="tablaConceptos">
+               <tr>
+                   <th>Cantidad</th>
+                   <th>Nombre</th>
+                   <th>Precio Unitario</th>
+                   <th>Total</th>
+               </tr>
+           </table>
+           <!--los tr y td con los datos los insertamos con el script de js-->
+       </div>
+       <hr />
 
-        </div>
+       <!--envia los datos del formulario al controlador-->
+       <div class="form-group">
+           <input type="submit" value="Guardar" class="btn btn-primary" />
+       </div>
 
-        <!--en via los datos del formulario al controlador-->
-        <div class="form-group">
-            <input type="submit" value="Gurdar Registros" class="btn btn-primary" />
-        </div>
-    </div>
-
+   </div>
 
     <!--Funcion JS que agrega conceptos a la tabla cuando se haga clic en el boton Agregar-->
     <script>
