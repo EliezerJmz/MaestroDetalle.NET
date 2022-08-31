@@ -18,24 +18,36 @@
         <h3>Maestro:</h3>
         <div class="form-group">
             @Html.LabelFor(v => v.Cliente)
-            @Html.TextBoxFor(V => V.Cliente)
+            @Html.TextBoxFor(v => v.Cliente, new { @class = "form-control" })
         </div>
         <hr />
      </div>
 
     <div class="row">
 
+        <!--input que agregan los valores a los campos-->
         <div class="form-group">
-
+            <label for="Cantidad">Cantidad</label>
+            <input type="number" class="form-control" id="Cantidad" placeholder="Ingres una Cantidad">
         </div>
+        <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input type="text" class="form-control" id="Nombre" placeholder="Ingres un Nombre">
+        </div>
+        <div class="form-group">
+            <label for="Precio">Precio</label>
+            <input type="number" class="form-control" id="Precio" placeholder="Ingres un Precio">
+        </div>
+        <!--return false, para que no realice el submit-->
+        <input type="button" value="Agregar" class="btn btn-success" onclick="AgregaConcepto(); return false" />
 
         <h3>Detalle:</h3>
-        <!--el datalle va a llenar una tabla de forma automatica,
-        agregamos un registro quemado solo para que se vea un registro
-        usaremos javaScript para que se llene automaticamente.
-        -->
+    <!--el datalle va a llenar una tabla de forma automatica,
+    agregamos un registro quemado solo para que se vea un registro
+    usaremos javaScript para que se llene automaticamente.
+    -->
         <div id="divConceptos">
-            <table>
+            <table id="tablaConceptos">
                 <tr>
                     <th>Cantidad</th>
                     <th>Nombre</th>
@@ -55,17 +67,21 @@
                     <td>10</td>
                 </tr>
             </table>
-            <!--Usamos un input type = hidden y name = Concpetos.Index, Conceptos es el nombre de la lista en el modelo
-            index el indice de la lista inicia en cero, value = 0, es el valor de inicio del indice de la lista de conceptos-->
+            <!--Usamos un input type = hidden para que no se muestren los valores
+                y name = Concpetos.Index, name debe tener el mismo nombre que el campo Conceptos de tipo lista del modelo VentasViewModel
+                para que MVC lo reconozca y pueda haer el mach.
+                el primer input tiene un name=Conceptos.Index y value = "0"
+                es el input que le indica el indice a la lista Conceptos en el controller.-->
             <input type="hidden" name="Conceptos.Index" id="Conceptos.Index" value="0" />
-            <!--insertar los valores en el modelo Conceptos-->
+            <!--envia los valores que tendra la lista Conceptos en el indice 0
+                el controller obtiene los valores por medio de [HttpPost]-->
             <input type="hidden" name="Conceptos[0].Cantidad" id="Conceptos[0].Cantidad" value="2" />
             <input type="hidden" name="Conceptos[0].Nombre" id="Conceptos[0].Nombre" value="Papas Fritas" />
             <input type="hidden" name="Conceptos[0].PrecioUnitario" id="Conceptos[0].PrecioUnitario" value="10" />
 
             <!--index el indice de la lista continua en 1, value = 1, es el valor que continua del indice de la lista de conceptos-->
             <input type="hidden" name="Conceptos.Index" id="Conceptos.Index" value="1" />
-            <!--insertar los valores en el modelo Conceptos-->
+            <!--insertar los valores en la lista Conceptos en el indice 1-->
             <input type="hidden" name="Conceptos[1].Cantidad" id="Conceptos[1].Cantidad" value="1" />
             <input type="hidden" name="Conceptos[1].Nombre" id="Conceptos[1].Nombre" value="Hanburguesa" />
             <input type="hidden" name="Conceptos[1].PrecioUnitario" id="Conceptos[1].PrecioUnitario" value="10" />
@@ -76,4 +92,51 @@
             <input type="submit" />
         </div>
     </div>
+
+
+    <!--Funcion JS que agrega conceptos a la tabla cuando se haga clic en el boton Agregar-->
+    <script>
+        function AgregaConcepto() {
+            //obtener los valores de los input:
+            let Cantidad = document.getElementById("Cantidad").value;
+            let Nombre = document.getElementById("Nombre").value;
+            let Precio = document.getElementById("Precio").value;
+
+            //Obtener la tabla tablaConceptos
+            let Tabla = document.getElementById("tablaConceptos");
+
+            //Crear en memotia los tr de la tabla
+            let TR = document.createElement("tr");
+
+            //Crear en memoria los td de la tabla
+            let TDCantidad = document.createElement("td");
+            let TDNombre = document.createElement("td");
+            let TDPrecio = document.createElement("td");
+            let TDTotal = document.createElement("td");
+
+            //Agregar nombres a los td, usamos las let de los valores de los input
+            TDCantidad.innerHTML = Cantidad;
+            TDNombre.innerHTML = Nombre;
+            TDPrecio.innerHTML = Precio;
+            //Total lo vamos a calcular en el back end para evitar errores, lo usaremos aqui de forma ilustrativa
+            TDTotal.innerHTML = parseFloat(Cantidad) * parseFloat(Precio);
+
+            //Agregar al TR los td 
+            TR.appendChild(TDCantidad);
+            TR.appendChild(TDNombre);
+            TR.appendChild(TDPrecio);
+            TR.appendChild(TDTotal);
+
+            //Agregar a la Tabla los TR
+            Tabla.appendChild(TR);
+
+            //Agregamos los hiddems para que se haga mach con el modelo
+
+
+            //Borrar los valores de los input
+            document.getElementById("Cantidad").value = "";
+            document.getElementById("Nombre").value = "";
+            document.getElementById("Precio").value = "";
+        }
+    </script>
 }

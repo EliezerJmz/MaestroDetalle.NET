@@ -39,8 +39,9 @@ namespace MaestroDetalle.Controllers
                     db.SaveChanges();
 
 
-                    //Agregar los Conceptos a la base de datos
-                    //debemos reccorrer model.Conceptos
+                    //VentaViewModel posee un campo tipo lista de Conceptos
+                    //Agregar la lista de Conceptos a la tabla concepto de la base de datos
+                    //debemos reccorrer model.Conceptos que es de tipo VentaViewModel 
                     foreach (var ConceptoModel in model.Conceptos)
                     {
                         //creamos un objeto para llenar los campos que vienen en el model y los campos que se calcular automaticamente
@@ -52,11 +53,12 @@ namespace MaestroDetalle.Controllers
                         //son los id que estan relacionados
                         concepto.IdVenta = venta.Id;
 
-                        //agregamos el objeto a la tabla de la db
+                        //agregamos el prinmer objeto a la tabla Concepto de la db
                         db.Concepto.Add(concepto);
                     }
                     //gurdamos los cambios en la db
                     db.SaveChanges();
+
                 }
                 ViewBag.Mensaje = "Registro Insertado en la DB";
                 //como tenemos otra vista que se llama Add nos retorna a ella misma sin necesidad de indicar su nombre
