@@ -71,5 +71,49 @@ namespace MaestroDetalle.Controllers
             }
         }
 
+
+
+
+
+        [HttpGet]
+        public ActionResult DataTable()
+        {
+            return View();
+        }
+
+        //Agrgar registro
+        [HttpPost]
+        public ActionResult DataTable(VentaViewModel model)
+        {
+            try
+            {
+                //conectar a la base de datos usando entity
+                using (MaestroDetalleEntities db = new MaestroDetalleEntities())
+                {
+                   
+                    //creamos un objeto tipo Ventas para cargar los datos del modelo
+                    Venta venta = new Venta();
+
+                    venta.Fecha = DateTime.Now;
+                    venta.Cliente = model.Cliente;
+
+                    //agregamos el objeto ventas a la base de datos y guardamos
+                    db.Venta.Add(venta);
+                    db.SaveChanges();
+                }
+                //como tenemos otra vista que se llama Add nos retorna a ella misma sin necesidad de indicar su nombre
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View(model);
+            }
+        }
+
+
+
+
+
+
     }
 }

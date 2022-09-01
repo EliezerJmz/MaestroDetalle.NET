@@ -1,0 +1,110 @@
+﻿@model MaestroDetalle.Models.ViewModels.VentaViewModel
+
+@{
+    ViewBag.Title = "DataTable con input quemados";
+}
+
+
+
+
+<h3 class="pt-5">@ViewBag.title</h3>
+<h4>Ejercicio para ver como se envia una lista de datos, de la vista al controller usando el metodo Post</h4>
+
+@using (Html.BeginForm("DataTable", "MaestroDetalle", FormMethod.Post, new { name = "frm", id = "frm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>VentaViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cliente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Nombre</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="number" name="Conceptos[0].Cantidad" id="Conceptos[0].Cantidad" /></td>
+                    <td><input type="text" name="Conceptos[0].Nombre" /></td>
+                    <td><input type="number" name="Conceptos[0].PrecioUnitario" id="Conceptos[0].PrecioUnitario" /></td>
+                    <td><input type="number" name="Conceptos[0].Total" id="Conceptos[0].Total" /></td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="Conceptos[1].Cantidad" id="Conceptos[1].Cantidad" /></td>
+                    <td><input type="text" name="Conceptos[1].Nombre" /></td>
+                    <td><input type="number" name="Conceptos[1].PrecioUnitario" id="Conceptos[1].PrecioUnitario" /></td>
+                    <td><input type="number" name="Conceptos[1].Total" id="Conceptos[1].Total" /></td>
+                </tr>
+                <tr>
+                    <td><input type="number" name="Conceptos[2].Cantidad" id="Conceptos[2].Cantidad" /></td>
+                    <td><input type="text" name="Conceptos[2].Nombre" /></td>
+                    <td><input type="number" name="Conceptos[2].PrecioUnitario" id="Conceptos[2].PrecioUnitario" /></td>
+                    <td><input type="number" name="Conceptos[2].Total" id="Conceptos[2].Total" /></td>
+                </tr>
+ 
+            </tbody>
+        </table>
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Calcular Totales" class="btn btn-success" onclick="Calcular(); return false" />
+                <hr />
+
+                <input type="submit" value="Guardar Registros" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+
+
+    
+    <script>
+        //Recorre los input quemados son solo 3
+        //el sctrip va dentro del beginForm
+        function Calcular() {
+
+            for (var i = 0; i <= 2; i++) {
+
+                let cantidad = document.getElementById("Conceptos[" + i + "].Cantidad").value;
+                let precio = document.getElementById("Conceptos[" + i + "].PrecioUnitario").value;
+                let total = document.getElementById("Conceptos[" + i + "].Total");
+
+                let Ctotal = parseFloat(cantidad) * parseFloat(precio);
+
+                total.value = Ctotal;
+
+            }
+
+
+            //tambien lo podemos mostrar asignando un id al formulario y el id del input
+            //document.frm.Total.value = Ctotal
+        }
+        //ejecutar la funcin automaticamente
+        // window.onload = Calcular();
+    </script>
+
+
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
