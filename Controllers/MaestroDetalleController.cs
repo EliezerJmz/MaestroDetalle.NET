@@ -72,9 +72,6 @@ namespace MaestroDetalle.Controllers
         }
 
 
-
-
-
         [HttpGet]
         public ActionResult DataTable()
         {
@@ -91,7 +88,8 @@ namespace MaestroDetalle.Controllers
                 using (MaestroDetalleEntities db = new MaestroDetalleEntities())
                 {
                    
-                    //creamos un objeto tipo Ventas para cargar los datos del modelo
+                    //TABLA Venta
+                    //creamos un objeto tipo Ventas para cargar los datos del modelo 
                     Venta venta = new Venta();
 
                     venta.Fecha = DateTime.Now;
@@ -99,9 +97,34 @@ namespace MaestroDetalle.Controllers
 
                     //agregamos el objeto ventas a la base de datos y guardamos
                     db.Venta.Add(venta);
+                    //gurdamos para que se cre su venta.id que es la FK del Concepto
                     db.SaveChanges();
+
+
+                    //TABLA Concepto
+                    //Cargar los conceptos a la tabla Concepto
+                    //recorremos la lista
+                    foreach(var conceptosModel in model.Conceptos)
+                    {
+                        //creamos un objeto del modelo Concepto
+                        //para cargar los datos de conceptosModel y enviarlo a la db
+                        Concepto conceptos = new Concepto();
+
+                        conceptos.Nombre = conceptosModel.Nombre;
+                        conceptos.Cantidad = conceptosModel.Cantidad;
+                        conceptos.PrecioUnitario = conceptosModel.PrecioUnitario;
+                        conceptos.Total = conceptosModel.Cantidad * conceptosModel.PrecioUnitario;
+                        //agragamos el venta.id al FK Concepto.IdVenta
+                        conceptos.IdVenta = venta.Id;
+
+                        db.Concepto.Add(conceptos);
+                    }            
+                    db.SaveChanges();
+
                 }
-                //como tenemos otra vista que se llama Add nos retorna a ella misma sin necesidad de indicar su nombre
+                ViewBag.Mensaje = "Se ha Creado un Cliente, y se han Creado los Conceptos";
+
+                //como tenemos otra vista que se llama DataTable nos retorna a ella misma sin necesidad de indicar su nombre
                 return View();
             }
             catch (Exception ex)
@@ -109,10 +132,6 @@ namespace MaestroDetalle.Controllers
                 return View(model);
             }
         }
-
-
-
-
 
 
     }

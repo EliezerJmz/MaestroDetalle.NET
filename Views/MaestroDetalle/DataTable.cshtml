@@ -9,6 +9,9 @@
 
 <h3 class="pt-5">@ViewBag.title</h3>
 <h4>Ejercicio para ver como se envia una lista de datos, de la vista al controller usando el metodo Post</h4>
+<hr />
+
+<h3 style="color:green;" class="text-center">@ViewBag.Mensaje</h3>
 
 @using (Html.BeginForm("DataTable", "MaestroDetalle", FormMethod.Post, new { name = "frm", id = "frm" }))
 {
